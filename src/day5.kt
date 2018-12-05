@@ -11,15 +11,24 @@ fun findFirstPair(list: List<Char>): Int{
     return -1
 }
 
+fun react(poly: MutableList<Char>): Int{
+    var nextPair = findFirstPair(poly)
+    while(nextPair != -1){
+        poly.removeAt(nextPair)
+        poly.removeAt(nextPair)
+        nextPair = findFirstPair(poly)
+    }
+    return poly.size
+}
+
 fun main(args : Array<String>) {
     val res = readFileAsLinesUsingUseLines(ClassLoader.getSystemResource("input51.txt").file)[0]
     var t2 = res.toMutableList()
+    println(react(t2))
 
-    var nextPair = findFirstPair(t2)
-    while(nextPair != -1){
-        t2.removeAt(nextPair)
-        t2.removeAt(nextPair)
-        nextPair = findFirstPair(t2)
+    // Part 2
+    for(comp in 'a'.. 'z'){
+        var t3 = t2.filter { x -> !x.equals(comp, true) }.toMutableList()
+        println(comp + " " + react(t3))
     }
-    println(t2.size)
 }
