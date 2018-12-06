@@ -21,12 +21,12 @@ fun toDatedEntry(entry: String): DatedEntry{
     return DatedEntry(toDate(getDatePart(entry)), entry)
 }
 
-class Guard(){
+class Guard{
     val minutesSlept = IntArray(60)
 
     fun addSleep(start: LocalDateTime, end: LocalDateTime){
         val minutes = ChronoUnit.MINUTES.between(start, end)
-        for(i in 0..minutes-1){
+        for(i in 0 until minutes){
             minutesSlept[start.plusMinutes(i).minute] += 1
         }
     }
@@ -49,21 +49,19 @@ fun main(args : Array<String>) {
     val iterator = datedEntries.listIterator()
     while(iterator.hasNext()){
         val line = iterator.next()
-        if(line.entry.contains("Guard")) {
-            currentGuardId = getId(line.entry)
-        }
-        else if(line.entry.contains("asleep")){
-            sleep = line.date
-        }
-        else if(line.entry.contains("wakes")){
-            var guard = guardPost.guards.get(currentGuardId)
-            if(guard == null) {
-                guard = Guard()
-            }
-            val wakeup = line.date
-            guard.addSleep(sleep, wakeup)
+        when {
+            line.entry.contains("Guard") -> currentGuardId = getId(line.entry)
+            line.entry.contains("asleep") -> sleep = line.date
+            line.entry.contains("wakes") -> {
+                var guard = guardPost.guards[currentGuardId]
+                if(guard == null) {
+                    guard = Guard()
+                }
+                val wakeup = line.date
+                guard.addSleep(sleep, wakeup)
 
-            guardPost.guards.set(currentGuardId, guard)
+                guardPost.guards[currentGuardId] = guard
+            }
         }
     }
 
@@ -72,7 +70,7 @@ fun main(args : Array<String>) {
 
     // This is so ugly - Read https://kotlinlang.org/docs/reference/null-safety.html#checking-for-null-keyword--in-conditions
     println(maxId)
-    val sleepingSchedule = guardPost.guards.get(2657)!!.minutesSlept
+    val sleepingSchedule = guardPost.guards[2657]!!.minutesSlept
     val maxValue: Int = sleepingSchedule!!.max()!!
     val value = sleepingSchedule!!.indexOf(maxValue)
     println(value)

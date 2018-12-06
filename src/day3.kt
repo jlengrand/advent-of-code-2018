@@ -11,13 +11,13 @@ fun fabricClaimFromString(string: String): FabricClaim{
     return FabricClaim(id.toInt(), xAndYOrigin[0].toInt(), xAndYOrigin[1].toInt(), widthAndHeight[0].toInt(), widthAndHeight[1].toInt())
 }
 
-class Cloth(val width: Int = 1000, val height: Int = 1000){
+class Cloth(private val width: Int = 1000, height: Int = 1000){
     val clothPixel = IntArray(width * height)
 
     fun claim(claim: FabricClaim){
         val startPixel = claim.xOrigin + claim.yOrigin * width
-        for(h in 0..claim.height-1){
-            for(w in 0..claim.width-1){
+        for(h in 0 until claim.height){
+            for(w in 0 until claim.width){
                 val pixel = startPixel + width*h + w
                 clothPixel[pixel] += 1
             }
@@ -26,23 +26,22 @@ class Cloth(val width: Int = 1000, val height: Int = 1000){
 
     fun isSingleClaim(claim: FabricClaim): Boolean{
         val startPixel = claim.xOrigin + claim.yOrigin * width
-        for(h in 0..claim.height-1){
-            for(w in 0..claim.width-1){
+        for(h in 0 until claim.height){
+            for(w in 0 until claim.width){
                 val pixel = startPixel + width*h + w
                 if (clothPixel[pixel] != 1) return false
             }
         }
 
-        return true;
+        return true
     }
 
     override fun toString(): String{
-        var res = "";
-        for(i in 1..clothPixel.size){
+        var res = ""
+        for(i in 1 until clothPixel.size){
             res += clothPixel[i-1]
             if(i % width == 0) res += "\n"
         }
-
         return res
     }
 }
@@ -57,7 +56,7 @@ fun main(args : Array<String>) {
     for(claim in claims) cloth.claim(claim)
     println(cloth.clothPixel.filter { it > 1 }.size)
 
-    val resClaim = claims.map { x -> Pair(x, cloth.isSingleClaim(x)) }.filter { x -> x.second == true }
-    println(resClaim.get(0).first.id)
+    val resClaim = claims.map { x -> Pair(x, cloth.isSingleClaim(x)) }.filter { x -> x.second }
+    println(resClaim[0].first.id)
 }
 

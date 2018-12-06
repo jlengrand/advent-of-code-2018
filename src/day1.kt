@@ -7,7 +7,7 @@ fun readFileAsLinesUsingUseLines(fileName: String): List<String>
 fun main(args : Array<String>) {
     val res = readFileAsLinesUsingUseLines(ClassLoader.getSystemResource("input.txt").file)
 
-    val final = res.foldRight(0, {x: String, acc: Long -> acc + x.toLong() })
+    val final = res.foldRight(0) { x: String, acc: Long -> acc + x.toLong() }
     println(final)
 
     val res2 = mutableListOf<Long>()
@@ -27,7 +27,7 @@ fun main(args : Array<String>) {
                 exitProcess(-1)
             }
             else{
-                frequencies.add(currentFreq);
+                frequencies.add(currentFreq)
             }
         }
     }

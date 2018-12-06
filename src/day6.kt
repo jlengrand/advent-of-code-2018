@@ -18,7 +18,7 @@ class Grid(size: Point){
     private val gridPixel = IntArray(width * height)
 
     fun applyManhattan(points: List<Point>){
-        for(i in 0..width*height-1){
+        for(i in 0 until width*height){
             if(gridPixel[i] == 0) {
                 val currPoint = Point(i % width, i / width)
                 gridPixel[i] = findNearestPoint(currPoint, points)
@@ -27,7 +27,7 @@ class Grid(size: Point){
     }
 
     fun applyManhattanSum(points: List<Point>){
-        for(i in 0..width*height-1){
+        for(i in 0 until width*height){
             if(gridPixel[i] == 0) {
                 val currPoint = Point(i % width, i / width)
                 gridPixel[i] = manhattanSumForPoint(currPoint, points)
@@ -58,13 +58,13 @@ class Grid(size: Point){
         val bordersBot = gridPixel.slice(IntRange(width * (height - 1), width * height - 1)).toList()
 
         val rightIndices = IntArray(height)
-        for(i in 0..height-1) { rightIndices[i] = (width) * i + (width - 1) }
+        for(i in 0 until height) { rightIndices[i] = (width) * i + (width - 1) }
         val bordersRight = gridPixel.sliceArray(rightIndices.toList()).toList()
 
         val bordersTop = gridPixel.slice(IntRange(0, width - 1)).toList()
 
         val leftIndices = IntArray(height)
-        for(i in 0..height-1) { leftIndices[i] = (width) * i }
+        for(i in 0 until height) { leftIndices[i] = (width) * i }
         val bordersLeft = gridPixel.sliceArray(leftIndices.toList()).toList()
 
         val borders = (bordersBot + bordersRight + bordersTop + bordersLeft).distinct()
@@ -86,7 +86,7 @@ class Grid(size: Point){
 }
 
 fun findMax(points: List<Point>): Point{
-    val max = points.foldRight(Point(0, 0), {point, finalPoint -> Point(max(point.x, finalPoint.x), max(point.y, finalPoint.y))})
+    val max = points.foldRight(Point(0, 0)) { point, finalPoint -> Point(max(point.x, finalPoint.x), max(point.y, finalPoint.y))}
     return Point(max.x + 1, max.y + 1)
 }
 
